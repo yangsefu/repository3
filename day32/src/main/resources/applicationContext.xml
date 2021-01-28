@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	<bean id = "studentService" 
+	class = "com.clive.service.impl.StudentServiceImpl"></bean>
+	<bean id = "myAspectj" class = "com.clive.myAspectj.MyAspectj"></bean>
+	<bean id = "teacherService" class = "com.clive.service.impl.TeacherServiceImpl"></bean>
+	<aop:config>
+	<!-- 配置切面 -->
+	   <aop:aspect  ref = "myAspectj">
+	   <!-- 抽取公共部分 -->
+	   <aop:pointcut expression="execution(* *..*.*ServiceImpl.add*(..))" id="demo"/>
+	   <!-- 前置通知 before -->
+	   <!-- <aop:before method="startlog"
+	    pointcut-ref = "demo"/> -->
+	    <!--  pointcut="execution(public void com.clive.service.impl.StudentServiceImpl.addStudent())"/> -->
+	  <!-- 后置通知  after-returning
+	        有bug 如果报错 不会继续增强-->
+	        <!--  <aop:after-returning method="commitlog"  
+	     pointcut-ref = "demo"/> -->
+	   
+	    <!-- 最终通知 after 报错也会增强  -->
+	    <!--<aop:after method="commitlog" 
+	    pointcut-ref = "demo"/>  -->
+	   <aop:around method="loggin" pointcut="execution(* *..*.*ServiceImpl.delete*(..))"/>
+	   </aop:aspect>
+	</aop:config>
+</beans>
